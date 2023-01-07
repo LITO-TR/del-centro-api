@@ -6,6 +6,8 @@ const customerSchema = new Schema({
   lastName: String,
   address: String,
   DNI: String,
-  civilStatus: String
+  civilStatus: String,
+  createdAt: Date,
+  updateAt: Date
 })
 module.exports = mongoose.model('Customers', customerSchema)
