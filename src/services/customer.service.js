@@ -8,5 +8,16 @@ const getCustomers = async () => {
     throw Error(error)
   }
 }
+const createCustomer = async (newCustomer) => {
+  try {
+    const customer = await Customer.create(newCustomer)
+    return customer
+  } catch (error) {
+    throw Error(error)
+  }
+}
 
-module.exports = { getCustomers }
+module.exports = {
+  getCustomers,
+  createCustomer
+}
