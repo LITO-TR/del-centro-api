@@ -5,4 +5,7 @@ const router = Router()
 
 router.get('/', customerController.getAllCustomers)
 router.post('/', customerController.createCustomer)
+router.get('/:id', customerController.getOneByCustomerId)
+router.put('/:id', customerController.updateCustomer)
+router.delete('/:id', customerController.deleteCustomer)
 module.exports = router
