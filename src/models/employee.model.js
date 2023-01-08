@@ -6,6 +6,8 @@ const employeeSchema = new Schema({
   lastName: String,
   phoneNumber: String,
   DNI: String,
-  address: String
+  address: String,
+  createdAt: Date,
+  updateAt: Date
 })
 module.exports = mongoose.model('Employees', employeeSchema)
