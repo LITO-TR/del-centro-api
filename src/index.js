@@ -11,7 +11,9 @@ const PORT = process.env.PORT || 9000
 const MONGODB = process.env.MONGO_URI
 
 app.get('/', (req, res) => {
-  res.send('API')
+  res.send({
+    msg: 'Hi'
+  })
 })
 // connection db
 mongoose
