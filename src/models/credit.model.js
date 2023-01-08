@@ -4,12 +4,12 @@ const Schema = mongoose.Schema
 const creditSchema = new Schema({
   product: String,
   creditAmount: Number,
-  interestPercent: Number,
+  decimalInterest: Number, // decimal /100
   interestAmount: Number,
-  time: Number,
+  numberOfQuotas: Number,
+  currentDate: Number,
   totalAmount: Number,
   paymentMethod: String, // day or week
-  numberOfQuotas: Number,
   quotasAmount: Number,
   mora: Number,
   firstPayDay: Date,
