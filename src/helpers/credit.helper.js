@@ -13,6 +13,14 @@ const getFirstDateByPaymentMethod = (paymentMethod) => {
   }
 }
 
+const getExpirationDay = (firstPayDate, numberOfQuotas, paymentMethod) => {
+  if (paymentMethod === 'day') {
+    return plusDate(firstPayDate, numberOfQuotas)
+  } else if (paymentMethod === 'week') {
+    return plusDate(firstPayDate, numberOfQuotas * 7)
+  }
+}
 module.exports = {
-  getFirstDateByPaymentMethod
+  getFirstDateByPaymentMethod,
+  getExpirationDay
 }
