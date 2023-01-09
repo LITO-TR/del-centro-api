@@ -1,22 +1,18 @@
 
 // milliseconds
+const plusDate = (date, days) => {
+  date.setDate(date.getDate() + days)
+  return date
+}
+
 const getFirstDateByPaymentMethod = (paymentMethod) => {
   const date = new Date()
-  // milliseconds
 
-  const DAY = 86400000
-  const WEEK = 604800000
-  const TIME_NOW = clearTime(date).getTime()
-  console.log(TIME_NOW)
   if (paymentMethod === 'day') {
-    return new Date(TIME_NOW + DAY)
+    return plusDate(date, 1)
   } else if (paymentMethod === 'week') {
-    return new Date(TIME_NOW + WEEK).toLocaleDateString()
+    return plusDate(date, 7)
   }
-}
-const clearTime = (date) => {
-  const dateChanged = new Date(date.toLocaleDateString())
-  return dateChanged
 }
 
 console.log(getFirstDateByPaymentMethod('day'), 'first day pay')
