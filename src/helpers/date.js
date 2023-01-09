@@ -14,5 +14,6 @@ const getFirstDateByPaymentMethod = (paymentMethod) => {
     return plusDate(date, 7)
   }
 }
-
+const date = new Date()
+console.log(date.getDay())
 console.log(getFirstDateByPaymentMethod('day'), 'first day pay')
