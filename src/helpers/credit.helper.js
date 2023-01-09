@@ -1,20 +1,16 @@
+const plusDate = (date, days) => {
+  date.setDate(date.getDate() + days)
+  return date
+}
+
 const getFirstDateByPaymentMethod = (paymentMethod) => {
   const date = new Date()
-  // milliseconds
-  const TIME_NOW = Date.now()
 
-  const DAY = 86400000
-  const WEEK = 604800000
-  clearTime(date)
   if (paymentMethod === 'day') {
-    return new Date(TIME_NOW + DAY)
+    return plusDate(date, 1)
   } else if (paymentMethod === 'week') {
-    return new Date(TIME_NOW + WEEK)
+    return plusDate(date, 7)
   }
-}
-const clearTime = (date) => {
-  const dateChanged = new Date(date.toLocaleDateString())
-  return dateChanged
 }
 
 module.exports = {
