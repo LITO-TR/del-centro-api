@@ -15,7 +15,8 @@ const creditSchema = new Schema({
   firstPayDay: Date,
   expirationDay: Date,
   discount: Number, // ampliacion?
-  disbursedAmount: Number, // desembolso
+  disbursedAmount: Number,
+  debtAmount: Number, // desembolso
   customerId: {
     type: Schema.Types.ObjectId,
     ref: 'Customer'
