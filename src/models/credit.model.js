@@ -12,8 +12,8 @@ const creditSchema = new Schema({
   paymentMethod: String, // day or week
   quotasAmount: Number,
   mora: Number,
-  firstPayDay: Date,
-  expirationDay: Date,
+  firstPayDate: Date,
+  expirationDate: Date,
   discount: Number, // ampliacion?
   disbursedAmount: Number,
   debtAmount: Number, // desembolso
