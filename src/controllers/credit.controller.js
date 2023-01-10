@@ -53,7 +53,28 @@ const createCreditExtension = async (req, res) => {
   }
 }
 
+const paymentQuota = async (req, res) => {
+  const { creditId, paymentNro } = req.params
+  const stringTmp = `quotas.${paymentNro}.isPaid`
+  const obj = {
+
+  }
+  obj[stringTmp] = true
+  try {
+    const creditUpdatedQuota = await Credit.updateOne({ _id: creditId }, obj)
+    console.log(creditUpdatedQuota)
+    res.status(200).json(
+      creditUpdatedQuota
+    )
+  } catch (error) {
+    res.status(400).json(
+      error
+    )
+  }
+}
+
 module.exports = {
   createCredit,
-  createCreditExtension
+  createCreditExtension,
+  paymentQuota
 }
