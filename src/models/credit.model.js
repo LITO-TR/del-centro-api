@@ -9,7 +9,7 @@ const creditSchema = new Schema({
   numberOfQuotas: Number,
   quotasAmount: Number,
   interestAmount: Number,
-  currentDate: Number,
+  currentDate: String,
   totalAmount: Number,
   paymentMethod: String, // day or week
   mora: Number,
