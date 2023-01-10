@@ -24,9 +24,9 @@ const test = (firstPayDate) => {
 } */
 
 const date = new Date() // '2023/01/10'
-console.log(date, 'now')
-console.log(date.getDate(), 'date')
-// console.log(helper.getExpirationDay(date, 10, 'day'))
-console.log(plusDate(date, 2))
+// console.log(date, 'now')
+// console.log(date.getDate(), 'date')
+console.log(helper.getQuotas(date, 5, 'week', 10))
+// console.log(plusDate(date, 2))
 // const dateString = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear()
 // console.log(dateString)
