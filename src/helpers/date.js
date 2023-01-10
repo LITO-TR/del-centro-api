@@ -14,6 +14,12 @@ const getFirstDateByPaymentMethod = (paymentMethod) => {
     return plusDate(date, 7)
   }
 }
+const test = (firstPayDate) => {
+  for (let i = firstPayDate; i <= plusDate(firstPayDate, 10); i = plusDate(firstPayDate, i)) {
+    console.log(i)
+  }
+}
+
 const date = new Date()
-console.log(date.getDay())
-console.log(getFirstDateByPaymentMethod('day'), 'first day pay')
+
+test(date)

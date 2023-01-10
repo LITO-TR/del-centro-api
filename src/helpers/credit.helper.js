@@ -25,7 +25,21 @@ const getExpirationDay = (firstPayDate, numberOfQuotas, paymentMethod) => {
     return plusDate(firstPayDate, numberOfQuotas * 7)
   }
 }
+
+const getQuotas = (firstPayDate, numberOfQuotas, paymentMethod, amountPay) => {
+  const array = []
+  let firstDate = firstPayDate
+  if (paymentMethod === 'day') {
+    for (let index = 0; index < numberOfQuotas; index++) {
+      const obj = { nro: index + 1, date: plusDate(firstDate, index), paymentAmount: amountPay, isPaid: false, paymentDate: null, moraDays: 0 }
+      firstDate = firstPayDate
+      array.push(obj)
+    }
+    return array
+  }
+}
 module.exports = {
   getFirstDateByPaymentMethod,
-  getExpirationDay
+  getExpirationDay,
+  getQuotas
 }

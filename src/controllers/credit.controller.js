@@ -2,6 +2,7 @@ const Credit = require('../models/credit.model')
 const creditHelper = require('../helpers/credit.helper')
 const createCredit = async (req, res) => {
   const creditData = req.body
+
   creditData.creditType = 'NUEVO CREDITO'
   creditData.interestAmount = creditData.creditAmount * creditData.decimalInterest
   creditData.totalAmount = creditData.creditAmount + creditData.interestAmount
@@ -11,6 +12,7 @@ const createCredit = async (req, res) => {
   creditData.currentDate = new Date()
   creditData.disbursedAmount = creditData.creditAmount
   creditData.quotasAmount = creditData.totalAmount / creditData.numberOfQuotas
+  creditData.quotas = creditHelper.getQuotas(new Date(creditData.firstPayDate), creditData.numberOfQuotas, creditData.paymentMethod, creditData.quotasAmount)
   creditData.debtAmount = 0.0
   creditData.interestAmount.toFixed(2)
   creditData.totalAmount.toFixed(2)
@@ -29,8 +31,8 @@ const createCredit = async (req, res) => {
 }
 
 const createCreditExtension = async (req, res) => {
-  const { id } = req.params
-  const previousCredit = await Credit.findById(id)
+  // const { id } = req.params
+  // const previousCredit = await Credit.findById(id)
   const creditData = req.body
   creditData.creditType = 'AMPLIACION'
   creditData.interestAmount = creditData.creditAmount * creditData.decimalInterest

@@ -18,7 +18,7 @@ const creditSchema = new Schema({
   discount: Number, // ampliacion?
   disbursedAmount: Number,
   debtAmount: Number,
-  quotas: [{ date: Date, quotasAmount: Number, isPaid: Boolean, paymentDate: Date, moraDays: Number }], // desembolso
+  quotas: [{ nro: Number, date: Date, paymentAmount: Number, isPaid: Boolean, paymentDate: Date, moraDays: Number }], // desembolso
   customerId: {
     type: Schema.Types.ObjectId,
     ref: 'Customer'
