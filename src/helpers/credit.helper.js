@@ -1,7 +1,9 @@
 
 const plusDate = (date, days) => {
   date.setDate(date.getDate() + days)
-  return date
+  const dateString = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate()
+  console.log(date.getDay())
+  return dateString
 }
 
 const getFirstDateByPaymentMethod = (paymentMethod) => {
@@ -41,5 +43,6 @@ const getQuotas = (firstPayDate, numberOfQuotas, paymentMethod, amountPay) => {
 module.exports = {
   getFirstDateByPaymentMethod,
   getExpirationDay,
-  getQuotas
+  getQuotas,
+  plusDate
 }
