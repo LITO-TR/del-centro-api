@@ -13,12 +13,12 @@ const creditSchema = new Schema({
   totalAmount: Number,
   paymentMethod: String, // day or week
   mora: Number,
-  firstPayDate: Date,
-  expirationDate: Date,
+  firstPayDate: String,
+  expirationDate: String,
   discount: Number, // ampliacion?
   disbursedAmount: Number,
   debtAmount: Number,
-  quotas: [{ nro: Number, date: Date, paymentAmount: Number, isPaid: Boolean, paymentDate: Date, moraDays: Number }], // desembolso
+  quotas: [{ nro: Number, date: String, paymentAmount: Number, isPaid: Boolean, paymentDate: String, moraDays: Number }], // desembolso
   customerId: {
     type: Schema.Types.ObjectId,
     ref: 'Customer'
