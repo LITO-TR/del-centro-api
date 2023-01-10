@@ -9,7 +9,7 @@ const createCredit = async (req, res) => {
   creditData.firstPayDate = creditHelper.getFirstDateByPaymentMethod(creditData.paymentMethod)
   creditData.discount = 0.0
   creditData.expirationDate = creditHelper.getExpirationDay(new Date(creditData.firstPayDate), creditData.numberOfQuotas, creditData.paymentMethod)
-  creditData.currentDate = new Date()
+  creditData.currentDate = creditHelper.plusDate(new Date(), 0)
   creditData.disbursedAmount = creditData.creditAmount
   creditData.quotasAmount = creditData.totalAmount / creditData.numberOfQuotas
   creditData.quotas = creditHelper.getQuotas(new Date(creditData.firstPayDate), creditData.numberOfQuotas, creditData.paymentMethod, creditData.quotasAmount)
