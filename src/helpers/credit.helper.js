@@ -2,7 +2,6 @@
 const plusDate = (date, days) => {
   date.setDate(date.getDate() + days)
   const dateString = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate()
-  console.log(date.getDay())
   return dateString
 }
 
@@ -22,19 +21,27 @@ const getFirstDateByPaymentMethod = (paymentMethod) => {
 
 const getExpirationDay = (firstPayDate, numberOfQuotas, paymentMethod) => {
   if (paymentMethod === 'day') {
-    return plusDate(firstPayDate, numberOfQuotas)
+    return plusDate(firstPayDate, numberOfQuotas - 1)
   } else if (paymentMethod === 'week') {
-    return plusDate(firstPayDate, numberOfQuotas * 7)
+    return plusDate(firstPayDate, (numberOfQuotas * 7) - 7)
   }
 }
 
 const getQuotas = (firstPayDate, numberOfQuotas, paymentMethod, amountPay) => {
   const array = []
-  let firstDate = firstPayDate
   if (paymentMethod === 'day') {
+    plusDate(firstPayDate, -1)
     for (let index = 0; index < numberOfQuotas; index++) {
-      const obj = { nro: index + 1, date: plusDate(firstDate, index), paymentAmount: amountPay, isPaid: false, paymentDate: null, moraDays: 0 }
-      firstDate = firstPayDate
+      const result = plusDate(firstPayDate, 1)
+      const obj = { nro: index + 1, date: result, paymentAmount: amountPay, isPaid: false, paymentDate: null, moraDays: 0 }
+      array.push(obj)
+    }
+    return array
+  } else if (paymentMethod === 'week') {
+    plusDate(firstPayDate, -7)
+    for (let index = 0; index < numberOfQuotas; index++) {
+      const result = plusDate(firstPayDate, 7)
+      const obj = { nro: index + 1, date: result, paymentAmount: amountPay, isPaid: false, paymentDate: null, moraDays: 0 }
       array.push(obj)
     }
     return array
