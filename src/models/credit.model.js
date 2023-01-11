@@ -18,6 +18,7 @@ const creditSchema = new Schema({
   discount: Number, // ampliacion?
   disbursedAmount: Number,
   debtAmount: Number,
+  creditStatus: String,
   customerId: {
     type: Schema.Types.ObjectId,
     ref: 'Customers'
