@@ -6,8 +6,8 @@ const creditSchema = new Schema({
   product: String,
   creditAmount: Number,
   decimalInterest: Number, // decimal /100
-  numberOfQuotas: Number,
-  quotasAmount: Number,
+  numberOfPayments: Number,
+  paymentsAmount: Number,
   interestAmount: Number,
   currentDate: String,
   totalAmount: Number,
@@ -18,7 +18,7 @@ const creditSchema = new Schema({
   discount: Number, // ampliacion?
   disbursedAmount: Number,
   debtAmount: Number,
-  quotas: [{ nro: Number, date: String, paymentAmount: Number, isPaid: Boolean, paymentDate: String, moraDays: Number }], // desembolso
+  payments: [{ nro: Number, date: String, payment: Number, isPaid: Boolean, paymentDate: String, moraDays: Number }], // desembolso
   customerId: {
     type: Schema.Types.ObjectId,
     ref: 'Customer'
