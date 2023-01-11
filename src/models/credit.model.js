@@ -18,14 +18,13 @@ const creditSchema = new Schema({
   discount: Number, // ampliacion?
   disbursedAmount: Number,
   debtAmount: Number,
-  payments: [{ nro: Number, date: String, payment: Number, isPaid: Boolean, paymentDate: String, moraDays: Number }], // desembolso
   customerId: {
     type: Schema.Types.ObjectId,
-    ref: 'Customer'
+    ref: 'Customers'
   },
   employeeId: {
     type: Schema.Types.ObjectId,
-    ref: 'Employee'
+    ref: 'Employees'
   }
 })
 
