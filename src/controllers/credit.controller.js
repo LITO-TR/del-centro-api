@@ -8,15 +8,14 @@ const createCredit = async (req, res) => {
   creditData.creditType = 'NUEVO CREDITO'
   creditData.interestAmount = creditData.creditAmount * creditData.decimalInterest
   creditData.totalAmount = creditData.creditAmount + creditData.interestAmount
-
   creditData.firstPayDate = creditHelper.getFirstDateByPaymentMethod(creditData.paymentMethod)
-  creditData.discount = 0.0
   creditData.expirationDate = creditHelper.getExpirationDay(new Date(creditData.firstPayDate), creditData.numberOfPayments, creditData.paymentMethod)
   creditData.currentDate = creditHelper.plusDate(new Date(), 0)
   creditData.disbursedAmount = creditData.creditAmount
   creditData.paymentsAmount = creditData.totalAmount / creditData.numberOfPayments
   // creditData.payments = creditHelper.getPayments(new Date(creditData.firstPayDate), creditData.numberOfPayments, creditData.paymentMethod, creditData.paymentsAmount)
   creditData.debtAmount = creditData.creditAmount
+  creditData.creditStatus = 'en proceso'
 
   try {
     const credit = await Credit.create(req.body)
@@ -34,22 +33,35 @@ const createCredit = async (req, res) => {
 
 const createCreditExtension = async (req, res) => {
   const { creditId } = req.params
-  // const previousCredit = await Credit.findById(id)
 
   const credit = await Credit.findById(creditId)
   const creditData = req.body
   creditData.creditType = 'AMPLIACION'
   creditData.interestAmount = creditData.creditAmount * creditData.decimalInterest
   creditData.totalAmount = creditData.creditAmount + creditData.interestAmount
-  creditData.firstPayDay = creditHelper.getFirstDateByPaymentMethod(creditData.paymentMethod)
-  creditData.expirationDate = creditHelper.getExpirationDay(creditData.firstPayDay, creditData.numberOfPayments, creditData.paymentMethod)
-  creditData.discount = credit.discount
-  creditData.disbursedAmount = creditData.creditAmount - creditData.discount
+  creditData.debtAmount = credit.debtAmount
+  creditData.firstPayDate = creditHelper.getFirstDateByPaymentMethod(creditData.paymentMethod)
+  creditData.expirationDate = creditHelper.getExpirationDay(new Date(creditData.firstPayDate), creditData.numberOfPayments, creditData.paymentMethod)
+  creditData.currentDate = creditHelper.plusDate(new Date(), 0)
+  creditData.paymentsAmount = creditData.totalAmount / creditData.numberOfPayments
+  creditData.disbursedAmount = creditData.creditAmount - creditData.debtAmount
 
   try {
     const creditExtension = await Credit.create(req.body)
+    await Payment.insertMany(creditHelper.getPayments(new Date(creditData.firstPayDate), creditData.numberOfPayments, creditData.paymentMethod, creditData.paymentsAmount, creditExtension._id))
+    const creditClose = await Credit.findOneAndUpdate({ _id: credit.id }, {
+      debtAmount: 0,
+      creditStatus: 'finalizado'
+    })
+    const paymentsClosed = await Payment.updateMany({ creditId: credit.id }, {
+      status: 'PAGADO',
+      paymentDate: creditHelper.plusDate(new Date(), 0)
+
+    })
     res.status(200).json(
-      creditExtension
+      creditExtension,
+      creditClose,
+      paymentsClosed
     )
   } catch (error) {
     res.status(400).json({
