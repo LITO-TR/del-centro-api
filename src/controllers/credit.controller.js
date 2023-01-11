@@ -8,16 +8,12 @@ const createCredit = async (req, res) => {
   creditData.totalAmount = creditData.creditAmount + creditData.interestAmount
   creditData.firstPayDate = creditHelper.getFirstDateByPaymentMethod(creditData.paymentMethod)
   creditData.discount = 0.0
-  creditData.expirationDate = creditHelper.getExpirationDay(new Date(creditData.firstPayDate), creditData.numberOfQuotas, creditData.paymentMethod)
+  creditData.expirationDate = creditHelper.getExpirationDay(new Date(creditData.firstPayDate), creditData.numberOfPayments, creditData.paymentMethod)
   creditData.currentDate = creditHelper.plusDate(new Date(), 0)
   creditData.disbursedAmount = creditData.creditAmount
-  creditData.quotasAmount = creditData.totalAmount / creditData.numberOfQuotas
-  creditData.quotas = creditHelper.getQuotas(new Date(creditData.firstPayDate), creditData.numberOfQuotas, creditData.paymentMethod, creditData.quotasAmount)
+  creditData.paymentsAmount = creditData.totalAmount / creditData.numberOfPayments
+  creditData.payments = creditHelper.getPayments(new Date(creditData.firstPayDate), creditData.numberOfPayments, creditData.paymentMethod, creditData.paymentsAmount)
   creditData.debtAmount = 0.0
-  creditData.interestAmount.toFixed(2)
-  creditData.totalAmount.toFixed(2)
-  creditData.quotasAmount.toFixed(2)
-  creditData.mora.toFixed(2)
   try {
     const credit = await Credit.create(req.body)
     res.status(200).json(
@@ -38,7 +34,7 @@ const createCreditExtension = async (req, res) => {
   creditData.interestAmount = creditData.creditAmount * creditData.decimalInterest
   creditData.totalAmount = creditData.creditAmount + creditData.interestAmount
   creditData.firstPayDay = creditHelper.getFirstDateByPaymentMethod(creditData.paymentMethod)
-  creditData.expirationDate = creditHelper.getExpirationDay(creditData.firstPayDay, creditData.numberOfQuotas, creditData.paymentMethod)
+  creditData.expirationDate = creditHelper.getExpirationDay(creditData.firstPayDay, creditData.numberOfPayments, creditData.paymentMethod)
 
   creditData.disbursedAmount = creditData.creditAmount - creditData.discount
   try {
@@ -55,16 +51,20 @@ const createCreditExtension = async (req, res) => {
 
 const paymentQuota = async (req, res) => {
   const { creditId, paymentNro } = req.params
-  const stringTmp = `quotas.${paymentNro}.isPaid`
-  const obj = {
+  const propertyPaid = `payments.${paymentNro}.isPaid`
+  const propertyPaymentDate = `payments.${paymentNro}.paymentDate`
+  const objTmp = {}
+  objTmp[propertyPaymentDate] = creditHelper.plusDate(new Date(), 0)
+  objTmp[propertyPaid] = true
 
-  }
-  obj[stringTmp] = true
   try {
-    const creditUpdatedQuota = await Credit.updateOne({ _id: creditId }, obj)
-    console.log(creditUpdatedQuota)
+    const credit = await Credit.findById(creditId)
+    console.log('entre')
+    objTmp.debtAmount = creditHelper.getDebt(credit.debtAmount, credit.paymentsAmount)
+    const creditUpdated = await Credit.updateOne({ _id: creditId }, objTmp)
+
     res.status(200).json(
-      creditUpdatedQuota
+      creditUpdated
     )
   } catch (error) {
     res.status(400).json(
