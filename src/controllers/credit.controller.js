@@ -16,7 +16,7 @@ const createCredit = async (req, res) => {
   creditData.disbursedAmount = creditData.creditAmount
   creditData.paymentsAmount = creditData.totalAmount / creditData.numberOfPayments
   // creditData.payments = creditHelper.getPayments(new Date(creditData.firstPayDate), creditData.numberOfPayments, creditData.paymentMethod, creditData.paymentsAmount)
-  creditData.debtAmount = 0.0
+  creditData.debtAmount = creditData.creditAmount
 
   try {
     const credit = await Credit.create(req.body)
@@ -33,16 +33,19 @@ const createCredit = async (req, res) => {
 }
 
 const createCreditExtension = async (req, res) => {
-  // const { id } = req.params
+  const { creditId } = req.params
   // const previousCredit = await Credit.findById(id)
+
+  const credit = await Credit.findById(creditId)
   const creditData = req.body
   creditData.creditType = 'AMPLIACION'
   creditData.interestAmount = creditData.creditAmount * creditData.decimalInterest
   creditData.totalAmount = creditData.creditAmount + creditData.interestAmount
   creditData.firstPayDay = creditHelper.getFirstDateByPaymentMethod(creditData.paymentMethod)
   creditData.expirationDate = creditHelper.getExpirationDay(creditData.firstPayDay, creditData.numberOfPayments, creditData.paymentMethod)
-
+  creditData.discount = credit.discount
   creditData.disbursedAmount = creditData.creditAmount - creditData.discount
+
   try {
     const creditExtension = await Credit.create(req.body)
     res.status(200).json(
@@ -58,23 +61,31 @@ const createCreditExtension = async (req, res) => {
 const paymentQuota = async (req, res) => {
   const { creditId, paymentId } = req.params
   const credit = await Credit.findById(creditId)
+  const payment = await Payment.findById(paymentId)
   const objPayment = {
     status: 'PAGADO',
     paymentDate: creditHelper.plusDate(new Date(), 0)
   }
   // TO-DO : DEBT
-  const payments = []
-  payments.push(credit.paymentsAmount)
-  const objCredit = {
-    debtAmount: creditHelper.getDebt(credit.creditAmount, payments)
+  // validar con pagos en validators
+  let objCredit = {}
+  if (payment.status === 'PENDIENTE') {
+    objCredit = {
+      debtAmount: credit.debtAmount - credit.paymentsAmount
+    }
+  } else if (payment.status === 'PAGADO') {
+    objCredit = {
+      debtAmount: credit.debtAmount
+    }
   }
+
   try {
-    const payment = await Payment.updateOne({ _id: paymentId }, objPayment)
+    const updatedPayment = await Payment.updateOne({ _id: paymentId }, objPayment)
     const updatedCredit = await Credit.updateOne({ _id: creditId }, objCredit)
 
     res.status(200).json({
       updatedCredit,
-      payment
+      updatedPayment
     }
     )
   } catch (error) {
