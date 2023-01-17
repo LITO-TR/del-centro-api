@@ -14,7 +14,7 @@ const createCredit = async (req, res) => {
   creditData.disbursedAmount = creditData.creditAmount
   creditData.paymentsAmount = creditData.totalAmount / creditData.numberOfPayments
   // creditData.payments = creditHelper.getPayments(new Date(creditData.firstPayDate), creditData.numberOfPayments, creditData.paymentMethod, creditData.paymentsAmount)
-  creditData.debtAmount = creditData.creditAmount
+  creditData.debtAmount = creditData.totalAmount
   creditData.creditStatus = 'en proceso'
 
   try {
@@ -106,9 +106,22 @@ const paymentQuota = async (req, res) => {
     )
   }
 }
+const getCredits = async (req, res) => {
+  try {
+    const credits = await Credit.find()
+    res.status(200).json(
+      credits
+    )
+  } catch (error) {
+    res.status(400).json(
+      error
+    )
+  }
+}
 
 module.exports = {
   createCredit,
   createCreditExtension,
-  paymentQuota
+  paymentQuota,
+  getCredits
 }
