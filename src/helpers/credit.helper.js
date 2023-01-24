@@ -34,7 +34,7 @@ const getPayments = (firstPayDate, numberOfPayments, paymentMethod, amountPay, i
     plusDate(firstPayDate, -1)
     for (let index = 0; index < numberOfPayments; index++) {
       const result = plusDate(firstPayDate, 1)
-      const obj = { paymentOrder: index + 1, date: result, payment: amountPay, status: 'PENDIENTE', paymentDate: null, moraDays: 0, creditId: id }
+      const obj = { paymentOrder: index + 1, date: result, payment: amountPay, status: 'PENDIENTE', paymentDate: '', moraDays: 0, creditId: id }
       array.push(obj)
     }
     return array
@@ -42,7 +42,7 @@ const getPayments = (firstPayDate, numberOfPayments, paymentMethod, amountPay, i
     plusDate(firstPayDate, -7)
     for (let index = 0; index < numberOfPayments; index++) {
       const result = plusDate(firstPayDate, 7)
-      const obj = { paymentOrder: index + 1, date: result, payment: amountPay, status: 'PENDIENTE', paymentDate: null, moraDays: 0, creditId: id }
+      const obj = { paymentOrder: index + 1, date: result, payment: amountPay, status: 'PENDIENTE', paymentDate: '', moraDays: 0, creditId: id }
       array.push(obj)
     }
     return array
