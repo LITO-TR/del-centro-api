@@ -8,4 +8,5 @@ router.post('/', customerController.createCustomer)
 router.get('/:id', customerController.getOneByCustomerId)
 router.put('/:id', customerController.updateCustomer)
 router.delete('/:id', customerController.deleteCustomer)
+router.get('/:customerId/credits', customerController.getCreditsByCustomer)
 module.exports = router
