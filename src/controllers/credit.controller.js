@@ -12,7 +12,7 @@ const createCredit = async (req, res) => {
   creditData.expirationDate = creditHelper.getExpirationDay(new Date(creditData.firstPayDate), creditData.numberOfPayments, creditData.paymentMethod)
   creditData.currentDate = creditHelper.plusDate(new Date(), 0)
   creditData.disbursedAmount = creditData.creditAmount
-  creditData.paymentsAmount = creditData.totalAmount / creditData.numberOfPayments
+  creditData.paymentsAmount = (creditData.totalAmount / creditData.numberOfPayments).toFixed(2)
   creditData.debtAmount = creditData.totalAmount
   creditData.creditStatus = 'en proceso'
 
@@ -70,9 +70,10 @@ const createCreditExtension = async (req, res) => {
 }
 
 const paymentQuota = async (req, res) => {
-  const { creditId, paymentId } = req.params
-  const credit = await Credit.findById(creditId)
+  const { paymentId } = req.params
+
   const payment = await Payment.findById(paymentId)
+  const credit = await Credit.findById(payment.creditId)
   const objPayment = {
     status: 'PAGADO',
     paymentDate: creditHelper.plusDate(new Date(), 0)
@@ -91,10 +92,10 @@ const paymentQuota = async (req, res) => {
   }
 
   try {
-    const updatedPayment = await Payment.updateOne({ _id: paymentId }, objPayment)
-    const updatedCredit = await Credit.updateOne({ _id: creditId }, objCredit)
+    await Payment.updateOne({ _id: paymentId }, objPayment)
+    await Credit.updateOne({ _id: payment.creditId }, objCredit)
     // const payment = await Payment.findById(paymentId)
-    const payments = await Payment.find({ creditId })
+    const payments = await Payment.find({ creditId: payment.creditId })
     console.log(payments)
     res.status(200).json(
       payments
@@ -145,11 +146,25 @@ const getPaymentsByCreditId = async (req, res) => {
   }
 }
 
+const getPaymentsByDate = async (req, res) => { // segun la fecha?
+  const { day, month, year } = req.params
+  try {
+    const payments = await Payment.find({ date: year + '/' + month + '/' + day })
+    res.status(200).json(
+      payments
+    )
+  } catch (error) {
+    res.status(400).json(
+      error
+    )
+  }
+}
 module.exports = {
   createCredit,
   createCreditExtension,
   paymentQuota,
   getAllCredits,
   getPaymentsByCreditId,
-  getCreditById
+  getCreditById,
+  getPaymentsByDate
 }
