@@ -12,7 +12,7 @@ const getFirstDateByPaymentMethod = (paymentMethod) => {
   if (paymentMethod === 'day') {
     if (day === 1 || day === 2 || day === 3 || day === 4) {
       return plusDate(date, 2)
-    } else if (day === 0 || day === 5 || day === 6) {
+    } else if (day === 0 || day === 5 || day === 6) { // viernes sabado domingo
       return plusDate(date, 1)
     }
   } else if (paymentMethod === 'week') {
@@ -33,9 +33,17 @@ const getPayments = (firstPayDate, numberOfPayments, paymentMethod, amountPay, i
   if (paymentMethod === 'day') {
     plusDate(firstPayDate, -1)
     for (let index = 0; index < numberOfPayments; index++) {
-      const result = plusDate(firstPayDate, 1)
-      const obj = { paymentOrder: index + 1, date: result, payment: amountPay, status: 'PENDIENTE', paymentDate: '', moraDays: 0, creditId: id }
-      array.push(obj)
+      if (firstPayDate.getDay() === 6) {
+        const result = plusDate(firstPayDate, 2)
+        console.log('entre ', result)
+        const obj = { paymentOrder: index + 1, date: result, payment: amountPay, status: 'PENDIENTE', paymentDate: '', moraDays: 0, creditId: id }
+        array.push(obj)
+      } else {
+        const result = plusDate(firstPayDate, 1)
+
+        const obj = { paymentOrder: index + 1, date: result, payment: amountPay, status: 'PENDIENTE', paymentDate: '', moraDays: 0, creditId: id }
+        array.push(obj)
+      }
     }
     return array
   } else if (paymentMethod === 'week') {
