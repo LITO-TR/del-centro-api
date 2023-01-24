@@ -13,7 +13,6 @@ const createCredit = async (req, res) => {
   creditData.currentDate = creditHelper.plusDate(new Date(), 0)
   creditData.disbursedAmount = creditData.creditAmount
   creditData.paymentsAmount = creditData.totalAmount / creditData.numberOfPayments
-  // creditData.payments = creditHelper.getPayments(new Date(creditData.firstPayDate), creditData.numberOfPayments, creditData.paymentMethod, creditData.paymentsAmount)
   creditData.debtAmount = creditData.totalAmount
   creditData.creditStatus = 'en proceso'
 
@@ -94,11 +93,11 @@ const paymentQuota = async (req, res) => {
   try {
     const updatedPayment = await Payment.updateOne({ _id: paymentId }, objPayment)
     const updatedCredit = await Credit.updateOne({ _id: creditId }, objCredit)
-
-    res.status(200).json({
-      updatedCredit,
-      updatedPayment
-    }
+    // const payment = await Payment.findById(paymentId)
+    const payments = await Payment.find({ creditId })
+    console.log(payments)
+    res.status(200).json(
+      payments
     )
   } catch (error) {
     res.status(400).json(
@@ -106,11 +105,38 @@ const paymentQuota = async (req, res) => {
     )
   }
 }
-const getCredits = async (req, res) => {
+const getAllCredits = async (req, res) => {
   try {
     const credits = await Credit.find()
     res.status(200).json(
       credits
+    )
+  } catch (error) {
+    res.status(400).json(
+      error
+    )
+  }
+}
+const getCreditById = async (req, res) => {
+  const { creditId } = req.params
+  try {
+    const credit = await Credit.findById(creditId)
+    res.status(200).json(
+      credit
+    )
+  } catch (error) {
+    res.status(400).json(
+      error
+    )
+  }
+}
+
+const getPaymentsByCreditId = async (req, res) => {
+  const { id } = req.params
+  try {
+    const payments = await Payment.find({ creditId: id })
+    res.status(200).json(
+      payments
     )
   } catch (error) {
     res.status(400).json(
@@ -123,5 +149,7 @@ module.exports = {
   createCredit,
   createCreditExtension,
   paymentQuota,
-  getCredits
+  getAllCredits,
+  getPaymentsByCreditId,
+  getCreditById
 }
