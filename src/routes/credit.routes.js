@@ -1,10 +1,10 @@
 const { Router } = require('express')
 const creditController = require('../controllers/credit.controller')
 const router = Router()
-
+router.get('/', creditController.getAllCredits)
 router.post('/', creditController.createCredit)
 router.put('/:creditId/payment/:paymentId', creditController.paymentQuota)
 router.post('/:creditId/extension', creditController.createCreditExtension)
-// router.post(':idCredit/payments', paymentController)
-
+router.get('/:id/payments', creditController.getPaymentsByCreditId)
+router.get('/:creditId', creditController.getCreditById)
 module.exports = router
