@@ -1,4 +1,5 @@
 const Customer = require('../models/customer.model')
+const Credit = require('../models/credit.model')
 const getAllCustomers = async (req, res) => {
   try {
     const customers = await Customer.find()
@@ -74,10 +75,24 @@ const deleteCustomer = async (req, res) => {
   }
 }
 
+const getCreditsByCustomer = async (req, res) => {
+  const { customerId } = req.params
+  try {
+    const credits = await Credit.find({ customerId })
+    res.status(200).json(
+      credits
+    )
+  } catch (error) {
+    res.status(200).json(
+      error
+    )
+  }
+}
 module.exports = {
   getAllCustomers,
   getOneByCustomerId,
   createCustomer,
   updateCustomer,
-  deleteCustomer
+  deleteCustomer,
+  getCreditsByCustomer
 }
