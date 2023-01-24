@@ -6,6 +6,7 @@ const customerSchema = new Schema({
   lastName: String,
   address: String,
   DNI: String,
+  phoneNumber: String,
   civilStatus: String,
   createdAt: Date,
   updateAt: Date
