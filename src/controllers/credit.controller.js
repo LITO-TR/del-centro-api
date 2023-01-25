@@ -1,5 +1,6 @@
 const Credit = require('../models/credit.model')
 const Payment = require('../models/payment.model')
+const Customer = require('../models/customer.model')
 
 const creditHelper = require('../helpers/credit.helper')
 const createCredit = async (req, res) => {
@@ -108,10 +109,26 @@ const getPaymentsByCreditId = async (req, res) => {
     )
   }
 }
+
+const getCustomerByCreditId = async (req, res) => {
+  const { creditId } = req.params
+  try {
+    const credit = await Credit.findById(creditId)
+    const customer = await Customer.findById(credit.customerId)
+    res.status(200).json(
+      customer
+    )
+  } catch (error) {
+    res.status(200).json(
+      error
+    )
+  }
+}
 module.exports = {
   createCredit,
   createCreditExtension,
   getAllCredits,
   getPaymentsByCreditId,
-  getCreditById
+  getCreditById,
+  getCustomerByCreditId
 }
