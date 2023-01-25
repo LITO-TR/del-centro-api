@@ -6,4 +6,5 @@ router.post('/', creditController.createCredit)
 router.post('/:creditId/extension', creditController.createCreditExtension)
 router.get('/:id/payments', creditController.getPaymentsByCreditId)
 router.get('/:creditId', creditController.getCreditById)
+router.get('/:creditId/customer', creditController.getCustomerByCreditId)
 module.exports = router
