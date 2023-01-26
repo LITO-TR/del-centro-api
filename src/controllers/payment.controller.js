@@ -28,10 +28,10 @@ const paymentQuota = async (req, res) => {
   try {
     await Payment.updateOne({ _id: paymentId }, objPayment)
     await Credit.updateOne({ _id: payment.creditId }, objCredit)
-    // const payment = await Payment.findById(paymentId)
-    const payments = await Payment.find({ creditId: payment.creditId })
+    const paymentPaid = await Payment.findById(paymentId)
+    // const payments = await Payment.find({ creditId: payment.creditId })
     res.status(200).json(
-      payments
+      paymentPaid
     )
   } catch (error) {
     res.status(400).json(
