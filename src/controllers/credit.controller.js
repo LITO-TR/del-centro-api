@@ -7,13 +7,13 @@ const createCredit = async (req, res) => {
   const creditData = req.body
 
   creditData.creditType = 'NUEVO CREDITO'
-  creditData.interestAmount = creditData.creditAmount * creditData.decimalInterest
-  creditData.totalAmount = creditData.creditAmount + creditData.interestAmount
+  creditData.interestAmount = parseFloat((creditData.creditAmount * creditData.decimalInterest).toFixed(2))
+  creditData.totalAmount = parseFloat((creditData.creditAmount + creditData.interestAmount).toFixed(2))
   creditData.firstPayDate = creditHelper.getFirstDateByPaymentMethod(creditData.paymentMethod)
   creditData.expirationDate = creditHelper.getExpirationDay(new Date(creditData.firstPayDate), creditData.numberOfPayments, creditData.paymentMethod)
   creditData.currentDate = creditHelper.plusDate(new Date(), 0)
   creditData.disbursedAmount = creditData.creditAmount
-  creditData.paymentsAmount = (creditData.totalAmount / creditData.numberOfPayments).toFixed(2)
+  creditData.paymentsAmount = parseFloat((creditData.totalAmount / creditData.numberOfPayments).toFixed(2))
   creditData.debtAmount = creditData.totalAmount
   creditData.creditStatus = 'en proceso'
 
@@ -37,14 +37,14 @@ const createCreditExtension = async (req, res) => {
   const credit = await Credit.findById(creditId)
   const creditData = req.body
   creditData.creditType = 'AMPLIACION'
-  creditData.interestAmount = creditData.creditAmount * creditData.decimalInterest
-  creditData.totalAmount = creditData.creditAmount + creditData.interestAmount
+  creditData.interestAmount = parseFloat((creditData.creditAmount * creditData).toFixed(2))
+  creditData.totalAmount = parseFloat((creditData.creditAmount + creditData.interestAmount).toFixed(2))
   creditData.debtAmount = credit.debtAmount
   creditData.firstPayDate = creditHelper.getFirstDateByPaymentMethod(creditData.paymentMethod)
   creditData.expirationDate = creditHelper.getExpirationDay(new Date(creditData.firstPayDate), creditData.numberOfPayments, creditData.paymentMethod)
   creditData.currentDate = creditHelper.plusDate(new Date(), 0)
-  creditData.paymentsAmount = creditData.totalAmount / creditData.numberOfPayments
-  creditData.disbursedAmount = creditData.creditAmount - creditData.debtAmount
+  creditData.paymentsAmount = parseFloat((creditData.totalAmount / creditData.numberOfPayments).toFixed(2))
+  creditData.disbursedAmount = parseFloat((creditData.creditAmount - creditData.debtAmount).toFixed(2))
 
   try {
     const creditExtension = await Credit.create(req.body)
