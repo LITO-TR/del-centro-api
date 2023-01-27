@@ -35,7 +35,6 @@ const getPayments = (firstPayDate, numberOfPayments, paymentMethod, amountPay, i
     for (let index = 0; index < numberOfPayments; index++) {
       if (firstPayDate.getDay() === 6) {
         const result = plusDate(firstPayDate, 2)
-        console.log('entre ', result)
         const obj = { paymentOrder: index + 1, date: result, payment: amountPay, status: 'PENDIENTE', paymentDate: '', moraDays: 0, creditId: id }
         array.push(obj)
       } else {
