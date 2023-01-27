@@ -17,7 +17,7 @@ const paymentQuota = async (req, res) => {
   let objCredit = {}
   if (payment.status === 'PENDIENTE') {
     objCredit = {
-      debtAmount: credit.debtAmount - credit.paymentsAmount
+      debtAmount: parseFloat((credit.debtAmount - credit.paymentsAmount).toFixed(2))
     }
   } else if (payment.status === 'PAGADO') {
     objCredit = {
