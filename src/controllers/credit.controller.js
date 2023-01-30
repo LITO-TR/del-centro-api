@@ -5,7 +5,6 @@ const Customer = require('../models/customer.model')
 const creditHelper = require('../helpers/credit.helper')
 const createCredit = async (req, res) => {
   const creditData = req.body
-
   creditData.creditType = 'NUEVO CREDITO'
   creditData.interestAmount = parseFloat((creditData.creditAmount * creditData.decimalInterest).toFixed(2))
   creditData.totalAmount = parseFloat((creditData.creditAmount + creditData.interestAmount).toFixed(2))
@@ -50,19 +49,17 @@ const createCreditExtension = async (req, res) => {
   try {
     const creditExtension = await Credit.create(req.body)
     await Payment.insertMany(creditHelper.getPayments(new Date(creditData.firstPayDate), creditData.numberOfPayments, creditData.paymentMethod, creditData.paymentsAmount, creditExtension._id))
-    const creditClose = await Credit.findOneAndUpdate({ _id: credit.id }, {
+    await Credit.findOneAndUpdate({ _id: credit.id }, {
       debtAmount: 0,
       creditStatus: 'finalizado'
     })
-    const paymentsClosed = await Payment.updateMany({ creditId: credit.id }, {
+    await Payment.updateMany({ creditId: credit.id }, {
       status: 'PAGADO',
       paymentDate: creditHelper.plusDate(new Date(), 0)
 
     })
     res.status(200).json(
-      creditExtension,
-      creditClose,
-      paymentsClosed
+      creditExtension
     )
   } catch (error) {
     res.status(400).json({
