@@ -28,11 +28,9 @@ const getOneByCustomerId = async (req, res) => {
 }
 
 const createCustomer = async (req, res) => {
-  const { name } = req.body // manda en el cuerpo lo extraigo asi
   const customerData = req.body
   customerData.createdAt = Date.now()
   customerData.updateAt = Date.now()
-  console.log(name)
   try {
     const createdCustomer = await Customer.create(req.body)
     res.status(200).json({
