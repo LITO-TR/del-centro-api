@@ -36,6 +36,8 @@ const createCreditExtension = async (req, res) => {
 
   const credit = await Credit.findById(creditId)
   const creditData = req.body
+  credit.creditStatus = 'finalizado'
+  // pay all payments
   creditData.creditType = 'AMPLIACION'
   creditData.interestAmount = parseFloat((creditData.creditAmount * creditData).toFixed(2))
   creditData.totalAmount = parseFloat((creditData.creditAmount + creditData.interestAmount).toFixed(2))
@@ -45,7 +47,6 @@ const createCreditExtension = async (req, res) => {
   creditData.currentDate = creditHelper.plusDate(new Date(), 0)
   creditData.paymentsAmount = parseFloat((creditData.totalAmount / creditData.numberOfPayments).toFixed(2))
   creditData.disbursedAmount = parseFloat((creditData.creditAmount - creditData.debtAmount).toFixed(2))
-
   try {
     const creditExtension = await Credit.create(req.body)
     await Payment.insertMany(creditHelper.getPayments(new Date(creditData.firstPayDate), creditData.numberOfPayments, creditData.paymentMethod, creditData.paymentsAmount, creditExtension._id))
