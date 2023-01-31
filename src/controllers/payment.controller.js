@@ -19,6 +19,14 @@ const paymentQuota = async (req, res) => {
       paymentMethod: method,
       customerPayment
     }
+    console.log(customerPayment)
+    const paymentDay = new Date(objPayment.paymentDate)
+    console.log(paymentDay)
+    const date = new Date(payment.date)
+    console.log(date)
+    if (paymentDay > date) {
+      objPayment.moraDays = payment.moraDays + ((paymentDay.getTime() - date.getTime()) / 86400000)
+    }
     objCredit = {
       debtAmount: parseFloat((credit.debtAmount - credit.paymentsAmount).toFixed(2))
     }
