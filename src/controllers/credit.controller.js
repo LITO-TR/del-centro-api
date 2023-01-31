@@ -122,11 +122,26 @@ const getCustomerByCreditId = async (req, res) => {
     )
   }
 }
+
+const getCreditsByCreationDate = async (req, res) => {
+  const { day, month, year } = req.params
+  try {
+    const credits = await Credit.find({ currentDate: year + '/' + month + '/' + day })
+    res.status(200).json(
+      credits
+    )
+  } catch (error) {
+    res.status(400).json(
+      error
+    )
+  }
+}
 module.exports = {
   createCredit,
   createCreditExtension,
   getAllCredits,
   getPaymentsByCreditId,
   getCreditById,
-  getCustomerByCreditId
+  getCustomerByCreditId,
+  getCreditsByCreationDate
 }
