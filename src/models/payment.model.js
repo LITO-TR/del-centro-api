@@ -9,7 +9,8 @@ const paymentSchema = new Schema({
   paymentDate: String,
   moraDays: Number,
   paymentType: String,
-  // customerPayment: Number,
+  customerPayment: Number,
+  paymentMethod: String,
   creditId: {
     type: Schema.Types.ObjectId,
     ref: 'Credits'
