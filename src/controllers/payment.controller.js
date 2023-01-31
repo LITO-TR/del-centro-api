@@ -3,19 +3,22 @@ const Payment = require('../models/payment.model')
 const creditHelper = require('../helpers/credit.helper')
 
 const paymentQuota = async (req, res) => {
-  const { paymentId } = req.params
+  const { paymentId, method, customerPayment } = req.params
 
   const payment = await Payment.findById(paymentId)
 
   const credit = await Credit.findById(payment.creditId)
-  const objPayment = {
-    status: 'PAGADO',
-    paymentDate: creditHelper.plusDate(new Date(), 0)
-  }
-  // TO-DO : DEBT
-  // validar con pagos en validators
+
+  let objPayment = {}
   let objCredit = {}
+
   if (payment.status === 'PENDIENTE') {
+    objPayment = {
+      status: 'PAGADO',
+      paymentDate: creditHelper.plusDate(new Date(), 0),
+      paymentMethod: method,
+      customerPayment
+    }
     objCredit = {
       debtAmount: parseFloat((credit.debtAmount - credit.paymentsAmount).toFixed(2))
     }
@@ -23,10 +26,20 @@ const paymentQuota = async (req, res) => {
     objCredit = {
       debtAmount: credit.debtAmount
     }
+    objPayment = {
+      paymentDate: payment.paymentDate
+    }
   }
 
   try {
     await Payment.updateOne({ _id: paymentId }, objPayment)
+    const payments = await Payment.find({ creditId: credit.id })
+    const paymentCont = payments.filter(obj => obj.status === 'PAGADO')
+    console.log(paymentCont.length)
+    if (paymentCont.length === credit.numberOfPayments) {
+      objCredit.creditStatus = 'finalizado'
+      console.log('aver', objCredit.creditStatus)
+    }
     await Credit.updateOne({ _id: payment.creditId }, objCredit)
     const paymentPaid = await Payment.findById(paymentId)
     // const payments = await Payment.find({ creditId: payment.creditId })
