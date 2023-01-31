@@ -7,4 +7,5 @@ router.post('/:creditId/extension', creditController.createCreditExtension)
 router.get('/:id/payments', creditController.getPaymentsByCreditId)
 router.get('/:creditId', creditController.getCreditById)
 router.get('/:creditId/customer', creditController.getCustomerByCreditId)
+router.get('/day/:day/month/:month/year/:year', creditController.getCreditsByCreationDate)
 module.exports = router
