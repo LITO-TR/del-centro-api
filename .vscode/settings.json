@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/7f012b75-fed3-4481-91c4-1023c1a8f975/AppServices/subscriptions/7f012b75-fed3-4481-91c4-1023c1a8f975/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/del-centro-api",
+    "appService.deploySubpath": "."
+}
