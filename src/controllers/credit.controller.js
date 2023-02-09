@@ -45,6 +45,7 @@ const createCreditExtension = async (req, res) => {
   creditData.currentDate = creditHelper.plusDate(new Date(), 0)
   creditData.paymentsAmount = parseFloat((creditData.totalAmount / creditData.numberOfPayments).toFixed(2))
   creditData.disbursedAmount = parseFloat((creditData.creditAmount - creditData.debtAmount).toFixed(2))
+  creditData.creditStatus = 'en proceso'
   creditData.customerId = credit.customerId
   creditData.employeeId = credit.employeeId
   console.log(creditData.creditAmount)
