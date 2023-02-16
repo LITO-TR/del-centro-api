@@ -48,7 +48,6 @@ const createCreditExtension = async (req, res) => {
   creditData.creditStatus = 'en proceso'
   creditData.customerId = credit.customerId
   creditData.employeeId = credit.employeeId
-  console.log(creditData.creditAmount)
 
   try {
     const creditExtension = await Credit.create(req.body)
@@ -65,6 +64,7 @@ const createCreditExtension = async (req, res) => {
     res.status(200).json(
       creditExtension
     )
+    console.log(creditExtension)
   } catch (error) {
     res.status(400).json({
       msg: error
