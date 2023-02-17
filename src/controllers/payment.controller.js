@@ -19,11 +19,8 @@ const paymentQuota = async (req, res) => {
       paymentMethod: method,
       customerPayment
     }
-    console.log(customerPayment)
     const paymentDay = new Date(objPayment.paymentDate)
-    console.log(paymentDay)
     const date = new Date(payment.date)
-    console.log(date)
     if (paymentDay > date) {
       objPayment.moraDays = payment.moraDays + ((paymentDay.getTime() - date.getTime()) / 86400000)
     }
@@ -43,10 +40,8 @@ const paymentQuota = async (req, res) => {
     await Payment.updateOne({ _id: paymentId }, objPayment)
     const payments = await Payment.find({ creditId: credit.id })
     const paymentCont = payments.filter(obj => obj.status === 'PAGADO')
-    console.log(paymentCont.length)
-    if (paymentCont.length === credit.numberOfPayments || credit.debtAmount === 0.0) {
+    if (paymentCont.length === credit.numberOfPayments || credit.debtAmount === 0) {
       objCredit.creditStatus = 'finalizado'
-      console.log('aver', objCredit.creditStatus)
     }
     await Credit.updateOne({ _id: payment.creditId }, objCredit)
     const paymentPaid = await Payment.findById(paymentId)
