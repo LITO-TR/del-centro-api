@@ -28,7 +28,7 @@ const paymentQuota = async (req, res) => {
       objPayment.moraDays = payment.moraDays + ((paymentDay.getTime() - date.getTime()) / 86400000)
     }
     objCredit = {
-      debtAmount: parseFloat((credit.debtAmount - credit.paymentsAmount).toFixed(2))
+      debtAmount: parseFloat((credit.debtAmount - customerPayment).toFixed(2))
     }
   } else if (payment.status === 'PAGADO') {
     objCredit = {
