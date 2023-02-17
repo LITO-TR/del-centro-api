@@ -40,7 +40,7 @@ const paymentQuota = async (req, res) => {
     await Payment.updateOne({ _id: paymentId }, objPayment)
     const payments = await Payment.find({ creditId: credit.id })
     const paymentCont = payments.filter(obj => obj.status === 'PAGADO')
-    if (paymentCont.length === credit.numberOfPayments || credit.debtAmount === 0) {
+    if (paymentCont.length === credit.numberOfPayments || objCredit.debtAmount === 0) {
       objCredit.creditStatus = 'finalizado'
     }
     await Credit.updateOne({ _id: payment.creditId }, objCredit)
