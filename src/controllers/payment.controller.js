@@ -44,7 +44,7 @@ const paymentQuota = async (req, res) => {
     const payments = await Payment.find({ creditId: credit.id })
     const paymentCont = payments.filter(obj => obj.status === 'PAGADO')
     console.log(paymentCont.length)
-    if (paymentCont.length === credit.numberOfPayments) {
+    if (paymentCont.length === credit.numberOfPayments || credit.debtAmount === 0.0) {
       objCredit.creditStatus = 'finalizado'
       console.log('aver', objCredit.creditStatus)
     }
